@@ -1,7 +1,6 @@
 <nav color="#ee8800">
     <collection label="Search">
 	    <view name="maps" default="true"/>
-        <view name="dark" />
     </collection>
 	<collection label="Views">
         <view source="unclassified" />
