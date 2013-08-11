@@ -1,0 +1,4 @@
+.appLogo{height:43px;width:331px;background-image:url(appLogo.png);background-repeat:no-repeat;}
+.appLogoContainer h1 { display: none; }
+.wiki-anchor { display: none; }
+code span.no { color: #bbb; }

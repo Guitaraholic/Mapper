@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<view onunloadCancelJobs="False" autoCancelInterval="100" stylesheet="dark.css">
+	<label>Google Maps Dark</label>
+	<module name="AccountBar" layoutPanel="appHeader"/>
+	<module name="AppBar" layoutPanel="navigationHeader"/>
+	<module name="Message" layoutPanel="messaging">
+		<param name="filter">*</param>
+		<param name="clearOnJobDispatch">False</param>
+		<param name="maxSize">1</param>
+	</module>
+	<module name="SearchBar" layoutPanel="splSearchControls-inline">
+		<param name="useAssistant">true</param>
+		<param name="useTypeahead">true</param>
+		<param name="useOwnSubmitButton">False</param>
+		<!--<param name="useAutoFocus">True</param>-->
+		<module name="TimeRangePicker">
+			<param name="selected">All time</param>
+			<param name="searchWhenChanged">True</param>
+			<module name="SubmitButton">
+				<param name="allowSoftSubmit">True</param>
+				<module name="Message" layoutPanel="graphArea">
+					<param name="filter">splunk.search.job</param>
+					<param name="clearOnJobDispatch">True</param>
+					<param name="maxSize">2</param>
+					<module name="JobStatus">
+						<param name="resultsLink">
+							<param name="popup">True</param>
+							<param name="viewTarget">report_builder_define_data</param>
+							<param name="transformedResultsViewTarget">report_builder_format_report</param>
+						</param>
+						<module name="FlashTimeline" layoutPanel="graphArea">
+							<param name="height">140px</param>
+							<param name="width">100%</param>
+							<module name="TitleBar" layoutPanel="viewHeader"/>
+
+								<module name="Message" layoutPanel="resultsAreaLeft">
+									<param name="filter">pageControls</param>
+									<param name="clearOnJobDispatch">True</param>
+									<param name="maxSize">1</param>
+								</module>
+
+								<module name="LinkSwitcher" layoutPanel="resultsHeaderPanel">
+									<param name="mode">independent</param>
+									<param name="label">Views:</param>
+									<param name="selected">Map</param>
+									<param name="disableOnNull">True</param>
+
+                                    <module name="GoogleMaps" group="Map" layoutPanel="resultsAreaLeft">
+                                        <param name="height">500px</param>
+                                        <param name="scrollwheel">off</param>
+                                        <param name="mapStyles">roadmap,terrain,satellite,splunk,dark,gray</param>
+                                        <param name="mapType">splunk</param>
+                                        <param name="overlay">clusters</param>
+                                        <param name="overlay.style">m</param>
+                                        <param name="overlay.opacity">0.75</param>
+                                        <param name="overlay.rangeMap">0, 100, 500, 1000, 10000</param>
+                                        <param name="overlay.roundQuantity">true</param>
+                                        <param name="mapStyle.splunk">{ label: 'Splunk', "style": [{featureType:"all",elementType:"all",stylers:[{invert_lightness:true}]},{featureType:"road",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"administrative",elementType:"labels",stylers:[{visibility:"simplified"}]},{featureType:"administrative.country",elementType:"labels",stylers:[{visibility:"on"}]}]}</param>
+                                        <param name="mapStyle.dark">{ label: 'Dark', style: [{featureType:"all",elementType:"all",stylers:[{invert_lightness:true}]},{featureType:"administrative",elementType:"labels",stylers:[{visibility:"off"}]},{featureType:"landscape",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"poi",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"road",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"transit",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"water",elementType:"labels",stylers:[{visibility:"off"}]},{featureType:"water",elementType:"geometry",stylers:[{lightness:10}]},{featureType:"all",elementType:"all",stylers:[]}] }</param>
+                                        <param name="mapStyle.gray">{ label: 'Gray', style: [{featureType:"administrative",elementType:"all",stylers:[{saturation:-100}]},{featureType:"landscape",elementType:"all",stylers:[{saturation:-100}]},{featureType:"poi",elementType:"all",stylers:[{saturation:-100}]},{featureType:"road",elementType:"all",stylers:[{saturation:-100}]},{featureType:"transit",elementType:"all",stylers:[{saturation:-100}]},{featureType:"water",elementType:"all",stylers:[{saturation:-100}]}] }</param>
+
+										<module name="SimpleResultsHeader" layoutPanel="resultsHeaderPanel">
+											<param name="entityName">results</param>
+											<param name="headerFormat">$gmapTotalCount$ results with location information ( $gmapLocationCount$ distinct locations ) $time$</param>
+										</module>
+
+										<module name="GeoDrilldown" layoutPanel="resultsHeaderPanel">
+											<module name="ViewRedirector">
+												<param name="viewTarget">flashtimeline</param>
+												<param name="popup">true</param>
+											</module>
+										</module>
+
+									</module>
+									<module name="HiddenPostProcess" group="Geo Results" layoutPanel="resultsAreaLeft">
+										<param name="search"> geonormalize | eval geo_info=coalesce(geo_info,"n/a") | stats count by _geo,geo_info | rename _geo as geo_position geo_info as location | table location geo_position count</param>
+										<module name="Paginator">
+											<param name="entityName">results</param>
+											<param name="count">10</param>
+											<module name="SimpleResultsTable">
+												<param name="drilldown">none</param>
+												<param name="entityName">results</param>
+											</module>
+										</module>
+									</module>
+
+									<module name="HiddenPostProcess" group="Events" layoutPanel="resultsAreaLeft">
+										<param name="search"> geonormalize | rename _geo as geo_position geo_info as location | fields location geo_position</param>
+										<module name="Paginator">
+											<param name="entityName">events</param>
+											<param name="count">10</param>
+											<module name="SoftWrap">
+												<param name="enable">true</param>
+												<module name="EventsViewer">
+													<param name="enableBehavior">False</param>
+													<param name="enableEventActions">False</param>
+													<param name="enableFieldActions">False</param>
+													<param name="enableTermSelection">False</param>
+													<param name="fields">geo_position location</param>
+												</module>
+											</module>
+										</module>
+									</module>
+
+								</module>
+
+						</module>
+					</module>
+				</module>
+			</module>
+		</module>
+	</module>
+</view>

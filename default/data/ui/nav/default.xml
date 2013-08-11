@@ -1,0 +1,21 @@
+<nav color="#ee8800">
+    <collection label="Search">
+	    <view name="maps" default="true"/>
+        <view name="dark" />
+    </collection>
+	<collection label="Views">
+        <view source="unclassified" />
+        <!-- Move default global views to submenu -->
+		<collection label="Other Views">
+            <view name="flashtimeline" />
+            <view name="charting" />
+		</collection>
+	</collection>
+	<collection label="Saved Searches">
+		<saved source="unclassified" />
+	</collection>
+    <collection label="Settings">
+        <a href="/manager/maps/apps/local/maps/setup?action=edit">GeoIP Settings</a>
+	    <view name="about"/>
+    </collection>
+</nav>

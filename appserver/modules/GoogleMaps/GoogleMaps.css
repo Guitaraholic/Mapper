@@ -1,0 +1,35 @@
+.map-msg { position: relative; }
+.map-status { position: absolute; z-index: 99999; padding-left: 2px; background: #fff; }
+.map-status .status-message { background: #fff url(/static/app/maps/img/spinner.gif) no-repeat left; padding: 3px 3px 3px 22px; }
+.cluster-icon { color: black; position: absolute; font-family: Arial, sans-serif; font-size: 11px; font-weight: bold; text-align: center;-moz-user-select:none;-webkit-user-select:none; }
+.splView-maps .LinkSwitcher label { display: none; }
+
+.drilldown-enabled .cluster-icon { cursor: pointer; }
+.cluster-icon.m-1 { background: transparent url(/static/app/maps/img/m1.png) no-repeat; width: 53px; height: 53px; line-height: 53px; z-index: 1; }
+.cluster-icon.m-2 { background: transparent url(/static/app/maps/img/m2.png) no-repeat; width: 56px; height: 56px; line-height: 56px; z-index: 2; }
+.cluster-icon.m-3 { background: transparent url(/static/app/maps/img/m3.png) no-repeat; width: 66px; height: 66px; line-height: 66px; z-index: 3; color: white; }
+.cluster-icon.m-4 { background: transparent url(/static/app/maps/img/m4.png) no-repeat; width: 78px; height: 78px; line-height: 78px; z-index: 4; color: white; }
+.cluster-icon.m-5 { background: transparent url(/static/app/maps/img/m5.png) no-repeat; width: 90px; height: 90px; line-height: 90px; z-index: 5; color: white; }
+.msie-fix .cluster-icon.m-1 { background: transparent url(/static/app/maps/img/s.gif) no-repeat !important; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/m1.png"); }
+.msie-fix .cluster-icon.m-2 { background: transparent url(/static/app/maps/img/s.gif) no-repeat !important; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/m2.png"); }
+.msie-fix .cluster-icon.m-3 { background: transparent url(/static/app/maps/img/s.gif) no-repeat !important; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/m3.png"); }
+.msie-fix .cluster-icon.m-4 { background: transparent url(/static/app/maps/img/s.gif) no-repeat !important; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/m4.png"); }
+.msie-fix .cluster-icon.m-5 { background: transparent url(/static/app/maps/img/s.gif) no-repeat !important; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/m5.png"); }
+.cluster-icon.conv-1 { background: transparent url(/static/app/maps/img/conv30.png) no-repeat; width: 30px; height: 27px; line-height: 24px; color: #333; z-index: 1;}
+.cluster-icon.conv-2 { background: transparent url(/static/app/maps/img/conv40.png) no-repeat; width: 40px; height: 36px; line-height: 32px; z-index: 2; }
+.cluster-icon.conv-3 { background: transparent url(/static/app/maps/img/conv50.png) no-repeat; width: 50px; height: 45px; line-height: 35px; color: #fff; z-index: 3; }
+.msie-fix .cluster-icon.conv-1 { background: transparent url(/static/app/maps/img/s.gif) no-repeat; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/conv30.png"); }
+.msie-fix .cluster-icon.conv-2 { background: transparent url(/static/app/maps/img/s.gif) no-repeat; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/conv40.png"); }
+.msie-fix .cluster-icon.conv-3 { background: transparent url(/static/app/maps/img/s.gif) no-repeat; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/conv50.png"); }
+.cluster-icon.heart-1 { background: transparent url(/static/app/maps/img/heart30.png) no-repeat; width: 30px; height: 26px; line-height: 24px; color: #333; z-index: 1;}
+.cluster-icon.heart-2 { background: transparent url(/static/app/maps/img/heart40.png) no-repeat; width: 40px; height: 35px; line-height: 32px; z-index: 2; }
+.cluster-icon.heart-3 { background: transparent url(/static/app/maps/img/heart50.png) no-repeat; width: 50px; height: 44px; line-height: 40px; color: #fff; z-index: 3; }
+.msie-fix .cluster-icon.heart-1 { background: transparent url(/static/app/maps/img/s.gif) no-repeat; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/heart30.png"); }
+.msie-fix .cluster-icon.heart-2 { background: transparent url(/static/app/maps/img/s.gif) no-repeat; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/heart40.png"); }
+.msie-fix .cluster-icon.heart-3 { background: transparent url(/static/app/maps/img/s.gif) no-repeat; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/heart50.png"); }
+.cluster-icon.people-1 { background: transparent url(/static/app/maps/img/people35.png) no-repeat; width: 35px; height: 35px; line-height: 24px; color: #fff; padding-top: 15px; z-index: 1; }
+.cluster-icon.people-2 { background: transparent url(/static/app/maps/img/people45.png) no-repeat; width: 45px; height: 45px; line-height: 32px; color: #fff; padding-top: 17px; z-index: 2; }
+.cluster-icon.people-3 { background: transparent url(/static/app/maps/img/people55.png) no-repeat; width: 55px; height: 55px; line-height: 35px; color: #fff; padding-top: 22px; z-index: 3; }
+.msie-fix .cluster-icon.people-1 { background: transparent url(/static/app/maps/img/s.gif) no-repeat; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/people35.png"); }
+.msie-fix .cluster-icon.people-2 { background: transparent url(/static/app/maps/img/s.gif) no-repeat; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/people45.png"); }
+.msie-fix .cluster-icon.people-3 { background: transparent url(/static/app/maps/img/s.gif) no-repeat; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='crop',src="/static/app/maps/img/people55.png"); }

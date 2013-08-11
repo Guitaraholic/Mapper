@@ -1,0 +1,89 @@
+<h1  id="Release-Notes">Release Notes<a href="#Release-Notes" class="wiki-anchor">&para;</a></h1>
+
+
+	<h1  id="Version-11-May-2011">Version 1.1 - May 2011<a href="#Version-11-May-2011" class="wiki-anchor">&para;</a></h1>
+
+
+	<h2  id="Internal-changes">Internal changes<a href="#Internal-changes" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li>fields<br />The module now uses the <code>_geo</code> field instead of the <code>_lat</code> and <code>_lng</code> fields to resolve the location. The <code>geoip</code> and the <code>geonormalize</code> command are now emitting this field. It contains the combined latitude/longitude information in the form <code>&lt;lat&gt;,&lt;lng&gt;</code> (eg. <code>47.11,0.815</code>).</li>
+	</ul>
+
+
+	<h2  id="Geolocation-Lookup">Geolocation Lookup<a href="#Geolocation-Lookup" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The geolocation lookup now uses the Maxmind GeoLite City database. The geoip command is now emitting different fields:</p>
+
+
+	<ul>
+	<li>&lt;field&gt;_latitude, &lt;field&gt;_longitude,</li>
+		<li>&lt;field&gt;_country_name, &lt;field&gt;_country_code, &lt;field&gt;_region_name, &lt;field&gt;_city, and the _geo field</li>
+	</ul>
+
+
+	<p>There are various options that can be configured in the geoip.conf. An app setup is provided as well.</p>
+
+
+	<p>Instead of using the geoip command, it's now possible to leverage the geo lookup:<br />Examples:<br /><pre>
+... | lookup geo ip as clientip
+... | lookup geo ip as src_ip
+... | lookup geo ip OUTPUT _geo
+</pre></p>
+
+
+	<p>The lookup definition is disabled by default.</p>
+
+
+	<h2  id="UI-Changes">UI Changes<a href="#UI-Changes" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li>Module changes
+	<ul>
+	<li>More configuration options for the module</li>
+		<li>Scrollwheel zooming is turned off by default</li>
+		<li>Streetview is turned off</li>
+		<li>Introduced opacity for cluster icons (Only in Browsers supporting native opacity).</li>
+		<li>Added new mapStyles (See dark view).</li>
+		<li>The module now persist settings like center, zoom and map style.</li>
+	</ul></li>
+	</ul>
+
+
+	<ul>
+	<li>The default view (maps) has changed:
+	<ul>
+	<li>Removed fields side-panel</li>
+		<li>Added 2 panel to kind-of debug the results (Geo Results and Events)</li>
+	</ul></li>
+	</ul>
+
+
+	<h2  id="Drilldown">Drilldown<a href="#Drilldown" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The module supports drilldown since 1.1 in 2 flavors:</p>
+
+
+	<h3  id="Custom-field-drilldown">Custom field drilldown<a href="#Custom-field-drilldown" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>When using the module in a custom dashboard, you can specify a drilldown field. All unique field values are then collected per location. When a marker or Cluster is clicked, those values are automatically combined/formatted in the form of</p>
+
+
+	<p><code>((&lt;drilldown_field&gt;=&lt;value1&gt;) OR (&lt;drilldown_fields&gt;=&lt;value2) OR ...)</code></p>
+
+
+	<p>This partitial search string will be propagated to downstream modules as a setting (<code>maps.drilldown</code>) an can be leveraged using eg. a stringreplace intention.</p>
+
+
+	<p>See the drilldown_demo views</p>
+
+
+	<h3  id="Automatic-drilldown">Automatic drilldown<a href="#Automatic-drilldown" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>When there is no <code>drilldown_field</code> specified the drilldown can only happen when a marker is clicked that represents a single location (ie. not when a cluster is clicked). So when a marker with 2 or more locations (distinct <code>_geo</code> values) is clicked, the maps view will be centered on the cluster location and the zoom level will be incremented. In the case of a single location the module will propagate the setting <code>maps.click</code> containing the <code>_geo</code> value. This setting can be used in all kinds of intentions (stringreplace, addterm, etc) or using the GeoDrilldown Module which will essentially append <code> | search _geo=&lt;value&gt;</code> to the search string.</p>

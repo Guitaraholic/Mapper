@@ -1,0 +1,141 @@
+<h1  id="Documentation">Documentation<a href="#Documentation" class="wiki-anchor">&para;</a></h1>
+
+
+<p>Google Maps for Splunk allows you to easily plot any Splunk search results with location information on a map.</p>
+
+
+<h2  id="Professional-Services-and-Support">Professional Services and Support<a href="#Professional-Services-and-Support" class="wiki-anchor">&para;</a></h2>
+
+
+<p><img src="http://www.spp.at/export/system/modules/at.spp.web/resources/img/spp.jpg" alt="" /> This add-on has been developed by <a href="http://www.spp.at/" class="external">SPP</a>, a Splunk Partner located in Vienna, Austria. If you require support on getting solutions using Google Maps up and running, please contact <a class="email" href="mailto:splunk@spp.at">splunk@spp.at</a>.</p>
+
+
+<h2  id="Licence-and-Terms-of-Use">Licence and Terms of Use<a href="#Licence-and-Terms-of-Use" class="wiki-anchor">&para;</a></h2>
+
+
+This app is licensed under the terms of the Creative Commons license and provided as-is without any warranty. It uses third-party components that are licensed differently:
+<ul>
+<li>Google Maps: <a class="external" href="http://code.google.com/apis/maps/terms.html">http://code.google.com/apis/maps/terms.html</a></li>
+    <li>MAXMIND GeoLite City database see <a class="external" href="http://geolite.maxmind.com/download/geoip/database/LICENSE.txt">http://geolite.maxmind.com/download/geoip/database/LICENSE.txt</a></li>
+    <li>pygeoip see <a class="external" href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a></li>
+</ul>
+
+
+<h2  id="Using-the-Google-Maps-Search-View">Using the Google Maps Search View<a href="#Using-the-Google-Maps-Search-View" class="wiki-anchor">&para;</a></h2>
+
+
+<p>The App provides a flashtimeline-like view which allows you to simply enter a search and display the results on the map. In order to plot search results on the map they have to have some kind of location information attached. This location information has to be included in a field with the name _geo and has to be formatted as "&lt;latitude&gt;,&lt;longitude&gt;".  Latitude and Longitude have to be expressed as floating point numbers. As an example "47.11,0.815" would be a valid _geo value. Other notations (like 47°N 12',...) are not supported.</p>
+
+
+<p>In most cases you don't have to build the _geo field yourself. The built-in geolocation lookup methods (geoip command and geo lookup) are emitting this field by default. In cases where you already have geolocation information in your results, you can leverage the geonormalize command to build the _geo value for you.</p>
+
+
+<h3  id="Geolocation-Lookup-for-IP-addresses">Geolocation Lookup for IP addresses<a href="#Geolocation-Lookup-for-IP-addresses" class="wiki-anchor">&para;</a></h3>
+
+
+<h4  id="Performing-Gelocation-Lookup-on-external-IP-addresses">Performing Gelocation Lookup on external IP addresses<a href="#Performing-Gelocation-Lookup-on-external-IP-addresses" class="wiki-anchor">&para;</a></h4>
+
+
+<p>External IP address values can be easily translated to locations by using the built-in geoip command or the geo lookup.</p>
+
+
+<h4  id="Examples">Examples:<a href="#Examples" class="wiki-anchor">&para;</a></h4>
+
+
+<p>Perform a geolocation lookup for values of the clientip field in access_combined events:<br /><pre>
+sourcetype=access_combined | geoip clientip
+</pre><br />Same as the previous example, but also perform DNS lookups in case when the value of the clientip field is a hostname and not an IP:<br /><pre>
+sourcetype=access_combined | geoip clientip resolve_hostnames=true
+</pre><br />Same as the first example, but using the geo lookup instead of the command<br /><pre>
+sourcetype=access_combined | lookup geo ip as clientip
+</pre></p>
+
+
+<h4  id="Performing-Gelocation-Lookup-on-internal-IP-addresses">Performing Gelocation Lookup on internal IP addresses<a href="#Performing-Gelocation-Lookup-on-internal-IP-addresses" class="wiki-anchor">&para;</a></h4>
+
+
+In order to perform geolocation lookup on private IP address ranges you have to implement a lookup yourself. Splunk provides multiple ways to achieve this:
+<ul>
+<li>Creating a CSV with the IP subnets and their locations and leveraging the CIDR match_type</li>
+    <li>Creating a scripted lookup which queries the geolocation information from an existing asset management system.</li>
+</ul>
+
+
+<h4  id="Performing-combined-Geolocation-Lookup-on-IP-adresses">Performing combined Geolocation Lookup on IP adresses<a href="#Performing-combined-Geolocation-Lookup-on-IP-adresses" class="wiki-anchor">&para;</a></h4>
+
+
+<p>Lookups for external and interal IP addresses can be easily combined.</p>
+
+
+<p>Examples:<br /><pre>
+sourcetype=access_combined clientip=* 
+| lookup geoip_internal ip as clientip 
+| geoip clientip
+</pre></p>
+
+
+<pre>
+sourcetype=access_combined clientip=* 
+| lookup example_geo_internal ip as clientip 
+| lookup geo ip as clientip OUTPUTNEW _geo geo_info
+</pre>
+
+<h3  id="Use-existing-geolocation-information-available-in-search-results">Use existing geolocation information available in search results<a href="#Use-existing-geolocation-information-available-in-search-results" class="wiki-anchor">&para;</a></h3>
+
+
+<p>It's common case that events already contain geo information.</p>
+
+
+<h4  id="The-geonormalize-command">The geonormalize command<a href="#The-geonormalize-command" class="wiki-anchor">&para;</a></h4>
+
+
+<p>The geonormalize command can detect existing fields containing the geoinformation and normalizes them for the GoogleMaps module. For doing this the command searches for field pairs (a latitude field and a longitude field) matching a name scheme. The values of those fields are then merged and emitted as the _geo field. The following name schemes are supported:</p>
+
+
+<ul>
+<li><code>*lat/*lng</code></li>
+    <li><code>*lat/*lon</code></li>
+    <li><code>*latitude/*longitude</code></li>
+</ul>
+
+
+<p>So for example when an event has the fields <code>gps_lat=47.11</code> and <code>gps_lon=0.815</code> the geonormalize command will detect those fields and emit the _geo field with the value <code>47.11,0.815</code>.</p>
+
+
+<p>Example:<br /><pre>
+sourcetype=device_tracking device_id=A47C08B13 | geonormalize
+</pre></p>
+
+
+<h4  id="Manual-building-the-_geo-field">Manual building the _geo field<a href="#Manual-building-the-_geo-field" class="wiki-anchor">&para;</a></h4>
+
+
+<p>If you don't want to use the geonormalize command or if the location fields do not match any naming scheme, you can manually build the _geo field.</p>
+
+
+<p>Example:<br /><pre>
+eventtype=phone_activation | eval _geo=phone_loc_1+","+phone_loc_2
+</pre><br />(Assuming that phone_loc_1 contains the latitude and phone_loc_2 contains the longitude)</p>
+
+
+<h2  id="Creating-Dashboards-with-Google-Maps">Creating Dashboards with Google Maps<a href="#Creating-Dashboards-with-Google-Maps" class="wiki-anchor">&para;</a></h2>
+
+
+<p>This add-on provides a Splunk UI module called <code>GoogleMaps</code>. This module can only be using in <strong>advanced XML</strong> dashboards. The usage of the module is quite similar to any built-in module in Splunk which displays results (like SimpleResultsTable, EventsViewer, etc.).</p>
+
+
+<p>Example:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="no"> 1</span>     <span class="ta">&lt;module</span> <span class="an">name</span>=<span class="s"><span class="dl">&quot;</span><span class="k">HiddenSearch</span><span class="dl">&quot;</span></span> <span class="an">layoutPanel</span>=<span class="s"><span class="dl">&quot;</span><span class="k">panel_row1_col1</span><span class="dl">&quot;</span></span> <span class="an">autoRun</span>=<span class="s"><span class="dl">&quot;</span><span class="k">true</span><span class="dl">&quot;</span></span><span class="ta">&gt;</span>
+<span class="no"> 2</span>         <span class="ta">&lt;param</span> <span class="an">name</span>=<span class="s"><span class="dl">&quot;</span><span class="k">search</span><span class="dl">&quot;</span></span><span class="ta">&gt;</span>sourcetype=access_combined | geoip clientip<span class="ta">&lt;/param&gt;</span>
+<span class="no"> 3</span>         <span class="ta">&lt;param</span> <span class="an">name</span>=<span class="s"><span class="dl">&quot;</span><span class="k">earliest</span><span class="dl">&quot;</span></span><span class="ta">&gt;</span>-24h@h<span class="ta">&lt;/param&gt;</span>
+<span class="no"> 4</span>         <span class="ta">&lt;module</span> <span class="an">name</span>=<span class="s"><span class="dl">&quot;</span><span class="k">GoogleMaps</span><span class="dl">&quot;</span></span><span class="ta">&gt;</span>
+<span class="no"> 5</span>             <span class="ta">&lt;param</span> <span class="an">name</span>=<span class="s"><span class="dl">&quot;</span><span class="k">height</span><span class="dl">&quot;</span></span><span class="ta">&gt;</span>500px<span class="ta">&lt;/param&gt;</span>
+<span class="no"> 6</span>             <span class="ta">&lt;param</span> <span class="an">name</span>=<span class="s"><span class="dl">&quot;</span><span class="k">mapType</span><span class="dl">&quot;</span></span><span class="ta">&gt;</span>roadmap<span class="ta">&lt;/param&gt;</span>
+<span class="no"> 7</span>             <span class="ta">&lt;param</span> <span class="an">name</span>=<span class="s"><span class="dl">&quot;</span><span class="k">scrollwheel</span><span class="dl">&quot;</span></span><span class="ta">&gt;</span>off<span class="ta">&lt;/param&gt;</span>
+<span class="no"> 8</span>         <span class="ta">&lt;/module&gt;</span>
+<span class="no"> 9</span>     <span class="ta">&lt;/module&gt;</span>
+</span></code></pre></p>
+
+
+<p>All available options to the module can be found at the module reference at your Splunk instance at <a href="/modules#Splunk.Module.GoogleMaps">/modules#Splunk.Module.GoogleMaps</a></p>
+
+

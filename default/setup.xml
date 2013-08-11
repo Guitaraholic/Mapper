@@ -1,0 +1,119 @@
+<setup>
+
+    <block title="Geo IP Database Settings" endpoint="googlemaps/configure" entity="settings">
+
+        <input field="database_file">
+            <type>text</type>
+            <label><![CDATA[Maxmind GeoCity Database Filename:]]></label>
+        </input>
+
+        <text><![CDATA[<span style="font-size: x-small;">(You have to reload this page, when you change the geoip database file in order to see the updated Database info)]]></text>
+
+        <input field="database_info">
+            <type>text</type>
+            <label>Database information:</label>
+        </input>
+
+        <text><![CDATA[ <script type="text/javascript">
+            $(function(){
+                var info_input = $('#item-\\/googlemaps\\/setup\\/settings\\/database_info input');
+                var dbinfo = info_input.val();
+                info_input.parent().html(dbinfo).css({ 'font-family': 'monospace', 'font-weight': 'bold', color: '#333', border: '1px solid #333', padding: '7px' });
+            });
+        </script> ]]></text>
+
+    </block>
+
+    <block title="GeoIP API" endpoint="googlemaps/configure" entity="settings">
+
+        <input field="api">
+            <type>text</type>
+            <label>Select the GeoIP API to use</label>
+        </input>
+
+        <text>Select the Geo IP to use. The Maxmind C API provides superior performance compared to pygeoip but needs to be installed into the Splunk libraries.</text>
+
+        <text><![CDATA[ <script type="text/javascript">
+            var API_OPTIONS = [
+                { value: 'pygeoip', label: 'Purely Python based Geo IP API (pygeoip)' },
+                { value: 'geoip', label: 'Maxmind C API' }
+            ];
+            $(function(){
+                // Create a select box for API selection
+                var apiItem = $('#item-\\/googlemaps\\/setup\\/settings\\/api');
+                var apiVal = $('input', apiItem).val();
+                $('input', apiItem).remove();
+                var opts = [];
+                $.each(API_OPTIONS, function(i,option) {
+                    opts.push([ '<option value="', option.value, '"', apiVal == option.value ? ' selected="selected"' : '', '>', option.label, '</option>' ].join(""));
+                });
+                $(['<select name="/googlemaps/configure/settings/api">',opts.join(""),'</select>'].join("")).appendTo(apiItem);
+            });
+        </script> ]]></text>
+
+    </block>
+
+    <block title="GeoIP Lookups" endpoint="data/transforms/lookups">
+
+        <input entity="geo" field="enabled">
+            <type>bool</type>
+            <label><![CDATA[Enable the <b>geo</b> lookup]]></label>
+        </input>
+
+        <text><![CDATA[
+        Usage: <code> eventtype=firewall-deny | lookup geo ip as src_ip </code>
+        ]]></text>
+
+
+    </block>
+
+    <block title="GeoIP Command" endpoint="data/commands">
+
+        <input entity="geoip" field="enabled">
+            <type>bool</type>
+            <label><![CDATA[Enable the <b>geoip</b> command]]></label>
+        </input>
+
+        <text><![CDATA[
+        Usage: <code> sourcetype=access_combined | geoip clientip resolve_hostnames=true</code>
+        ]]></text>
+
+    </block>
+
+    <block title="Cache Settings" endpoint="googlemaps/configure">
+
+        <input field="cache_memory" entity="settings">
+            <type>bool</type>
+            <label>Enable memory caching.</label>
+        </input>
+
+        <text>If enabled, the geolocation lookup will use a cache which will improve performance but cause the script to use more memory. If disabled all reads will occur from disk.</text>
+
+        <input field="cache_mmap" entity="pygeoip">
+            <type>bool</type>
+            <label>Enable MMAP caching.</label>
+        </input>
+
+        <text> Enabling MMAP caching requires the mmap module to be installed in the Splunk Python libraries. If enabled, the database file will be read to memory entirely. This provides the best performance. </text>
+
+    </block>
+
+    <block title="Geo IP Lookup Settings" endpoint="googlemaps/configure" entity="settings">
+
+        <input field="resolve_hostnames">
+            <type>bool</type>
+            <label>Resolve hostnames</label>
+        </input>
+
+        <text>If enabled, the geolocation lookup tries to resolve hostnames via DNS lookups. (This can be overridden using the geoip command)</text>
+
+        <input field="add_info_field">
+            <type>bool</type>
+            <label>Add the additional geo information to the result</label>
+        </input>
+
+        <text>If enabled, the lookups and the geoip command will add a field called "geo_info" to the result containing the country and city name.</text>
+
+    </block>
+
+</setup>

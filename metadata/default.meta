@@ -1,0 +1,56 @@
+
+# Application-level permissions
+
+[]
+access = read : [ * ], write : [ admin, power ]
+
+### EVENT TYPES
+
+[eventtypes]
+export = system
+
+
+### PROPS
+
+[props]
+export = system
+
+
+### TRANSFORMS
+
+[transforms]
+export = system
+
+[lookups]
+export = system
+
+### COMMANDS
+
+[commands/geoip]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = nobody
+
+[commands/geonormalize]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = nobody
+
+### VIEWS
+
+[views/maps]
+access = read : [ * ], write : [ admin ]
+export = system
+owner = nobody
+
+### EVENTTYPES
+
+[eventtypes/google-maps-demo-results]
+access = read : [ * ], write : [ admin, power ]
+export = none
+
+[geoip/pygeoip]
+export = system
+
+[geoip/settings]
+export = system
