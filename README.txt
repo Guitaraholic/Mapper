@@ -1,26 +1,22 @@
-(c) by SPP Handelsges.m.b.H. 2011 - All rights reserved - http://www.spp.at/
-Author: Siegfried Puchbauer
+Author: Paul McDonough
+Based on Work by Siegfried Puchbauer
 Feedback: splunk@spp.at
 
-Google Maps for Splunk
+Mapper for Splunk
 ======================
 
 === Documentation ===
 
-Google Maps for Splunk allows you to easily plot any Splunk search results with location information on a map.
+Mapper is based on the excellent Google Maps for Splunk application. This app changes focus to mapping by Postcode Data for Geo lookups rather then IP addresses.
 
-== Professional Services and Support ==
+Additional configuration and features to enable tooltip popup reporting and more!
 
-This add-on has been developed by SPP (http://www.spp.at/), a Splunk Partner located in Vienna, Austria. If you require
-support on getting solutions using Google Maps up and running, please contact splunk@spp.at.
 
 == Licence and Terms of Use ==
 
 This app is licensed under the terms of the Creative Commons license and provided as-is without any warranty. It uses
 third-party components that are licensed differently:
 * Google Maps: http://code.google.com/apis/maps/terms.html
-* MAXMIND GeoLite City database see http://geolite.maxmind.com/download/geoip/database/LICENSE.txt
-* pygeoip see http://www.gnu.org/licenses/lgpl.html
 
 == Using the Google Maps Search View ==
 
@@ -43,16 +39,16 @@ External IP address values can be easily translated to locations by using the bu
 Examples:
 
 Perform a geolocation lookup for values of the clientip field in access_combined events:
-    
+
     sourcetype=access_combined | geoip clientip
 
 Same as the previous example, but also perform DNS lookups in case when the value of the clientip field is a hostname
 and not an IP:
-    
+
     sourcetype=access_combined | geoip clientip resolve_hostnames=true
 
 Same as the first example, but using the geo lookup instead of the command
-    
+
     sourcetype=access_combined | lookup geo ip as clientip
 
 Performing Gelocation Lookup on internal IP addresses
@@ -69,18 +65,18 @@ Lookups for external and interal IP addresses can be easily combined.
 Examples:
 
 sourcetype=access_combined clientip=*
-| lookup geoip_internal ip as clientip 
+| lookup geoip_internal ip as clientip
 | geoip clientip
 
 
-sourcetype=access_combined clientip=* 
-| lookup example_geo_internal ip as clientip 
+sourcetype=access_combined clientip=*
+| lookup example_geo_internal ip as clientip
 | lookup geo ip as clientip OUTPUTNEW _geo geo_info
 
 
 = Use existing geolocation information available in search results =
 
-It's common case that events already contain geo information. 
+It's common case that events already contain geo information.
 
 The geonormalize command
 
