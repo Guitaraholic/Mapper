@@ -4,10 +4,13 @@ import sys,re,csv
 #import spp.debug
 #spp.debug.redirect_all("geonormalize")
 
-LAT_FIELD_REGEX = re.compile("(.*_|^)lat(itude)?$")
-LNG_SUFFIXES = ['lng','lon','longitude']
+#LAT_FIELD_REGEX = re.compile("(.*_|^)lat(itude)?$")
+LAT_FIELD_REGEX = re.compile("(.*_|^)(l|L)at(itude)?$")
+#LNG_SUFFIXES = ['lng','lon','longitude']
+LNG_SUFFIXES = ['lng','lon','longitude','Longitude']
 GEO_FIELD='_geo'
-KNOWN_FIELDS = [('_lat','_lng'),('clientip_lat','clientip_lon'),('ip_latitude','ip_longitude')]
+#KNOWN_FIELDS = [('_lat','_lng'),('clientip_lat','clientip_lon'),('ip_latitude','ip_longitude')]
+KNOWN_FIELDS = [('_lat','_lng'),('clientip_lat','clientip_lon'),('ip_latitude','ip_longitude'),('Latitude','Longitude')]
 
 def find_geo_fields(fields):
 	for f in KNOWN_FIELDS:
